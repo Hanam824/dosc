@@ -5,5 +5,6 @@ Dosc.xcodeproj/
 DerivedData/
 dist/
 xcuserdata/
-Config/Secrets.xcconfig
+Config/Secrets.development.xcconfig
+Config/Secrets.production.xcconfig
 .DS_Store

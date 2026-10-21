@@ -42,16 +42,17 @@ jobs:
       - name: Test
         run: swift test --package-path Packages/DoscKit
 
-      # GITHUB_CLIENT_ID is an optional repository variable (Settings → Variables): the OAuth App
-      # used for "Sign in with GitHub". Without it, release builds offer token sign-in only.
+      # DOSC_GITHUB_CLIENT_ID is an optional repository variable (Settings → Variables; GitHub reserves
+      # the GITHUB_ prefix): the OAuth App used for "Sign in with GitHub". Without it, release builds
+      # offer token sign-in only. It becomes GITHUB_CLIENT_ID in Config/Secrets.production.xcconfig.
       - name: Build the release files
         id: package
         env:
           VERSION: ${{ inputs.version }}
-          GITHUB_CLIENT_ID: ${{ vars.GITHUB_CLIENT_ID }}
+          CLIENT_ID: ${{ vars.DOSC_GITHUB_CLIENT_ID }}
         run: |
-          if [ -n "$GITHUB_CLIENT_ID" ]; then
-            echo "GITHUB_CLIENT_ID = $GITHUB_CLIENT_ID" > Config/Secrets.xcconfig
+          if [ -n "$CLIENT_ID" ]; then
+            echo "GITHUB_CLIENT_ID = $CLIENT_ID" > Config/Secrets.production.xcconfig
           fi
           ./scripts/package-release.sh "$VERSION"
           ls -l dist

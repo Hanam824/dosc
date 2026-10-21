@@ -1,0 +1,4 @@
+// Release builds (scripts/package-release.sh, release and nightly workflows). Values go in
+// Secrets.production.xcconfig (git-ignored); CI writes it from repository variables.
+#include "Base.xcconfig"
+#include? "Secrets.production.xcconfig"

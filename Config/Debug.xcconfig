@@ -1,0 +1,4 @@
+// Debug builds (Xcode, ./run.sh). Local values go in Secrets.development.xcconfig (git-ignored);
+// copy Secrets.example.xcconfig to start.
+#include "Base.xcconfig"
+#include? "Secrets.development.xcconfig"

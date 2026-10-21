@@ -29,7 +29,7 @@ To run on your iPhone without a paid developer account, pick your Apple ID's fre
 ### Sign in
 
 - **Token:** create a [fine-grained token](https://github.com/settings/personal-access-tokens/new) with read-only access to Contents, Issues, Pull requests and Metadata (or a classic token with `repo`, `read:org`, `notifications`).
-- **Sign in with GitHub (device flow):** register an OAuth App with Device Flow enabled, then put its client ID in `Config/Secrets.xcconfig` (see `Config/Secrets.example.xcconfig`).
+- **Sign in with GitHub (device flow):** register an OAuth App with Device Flow enabled, then copy `Config/Secrets.example.xcconfig` to `Config/Secrets.development.xcconfig` (Debug builds) and/or `Config/Secrets.production.xcconfig` (Release builds) and set `GITHUB_CLIENT_ID`. Both files are git-ignored.
 
 ## Releases
 
