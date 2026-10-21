@@ -1,0 +1,4 @@
+// Shared build settings. Local, uncommitted values (e.g. GITHUB_CLIENT_ID) go in
+// Config/Secrets.xcconfig, which is optional; copy Secrets.example.xcconfig to start.
+GITHUB_CLIENT_ID =
+#include? "Secrets.xcconfig"

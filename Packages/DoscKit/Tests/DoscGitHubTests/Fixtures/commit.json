@@ -1,0 +1,10 @@
+{"sha":"6dcb09b5b57875f334f61aebed695e2e4193db5e","html_url":"https://github.com/octocat/Hello-World/commit/6dcb09b",
+ "commit":{"message":"Fix all the bugs\n\nAnd add tests.","author":{"name":"Monalisa Octocat","email":"mona@github.com","date":"2026-10-03T12:00:00Z"}},
+ "author":{"login":"octocat","avatar_url":"https://avatars.githubusercontent.com/u/583231?v=4"},
+ "parents":[{"sha":"7638417db6d59f3c431d3e1f261cc637155684cd"}],
+ "stats":{"additions":104,"deletions":4,"total":108},
+ "files":[
+   {"filename":"file1.txt","status":"modified","additions":2,"deletions":1,"changes":3,"patch":"@@ -1,2 +1,3 @@\n a\n-b\n+c\n+d"},
+   {"filename":"new/name.png","previous_filename":"old/name.png","status":"renamed","additions":0,"deletions":0,"changes":0},
+   {"filename":"gone.swift","status":"removed","additions":0,"deletions":3,"changes":3,"patch":"@@ -1,3 +0,0 @@\n-x\n-y\n-z"}
+ ]}

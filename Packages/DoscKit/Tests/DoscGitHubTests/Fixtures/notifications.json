@@ -1,0 +1,8 @@
+[
+  {"id":"1","unread":true,"reason":"review_requested","updated_at":"2026-10-20T10:00:00Z",
+   "subject":{"title":"Greetings","url":"https://api.github.com/repos/octokit/octokit.rb/pulls/123","type":"PullRequest"},
+   "repository":{"full_name":"octokit/octokit.rb"}},
+  {"id":"2","unread":false,"reason":"subscribed","updated_at":"2026-10-19T10:00:00Z",
+   "subject":{"title":"v1.0","url":"https://api.github.com/repos/octokit/octokit.rb/releases/9","type":"Release"},
+   "repository":{"full_name":"octokit/octokit.rb"}}
+]

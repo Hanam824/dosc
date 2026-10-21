@@ -1,0 +1,7 @@
+[
+  {"name":"README.md","path":"README.md","type":"file","size":120,"sha":"a"},
+  {"name":"src","path":"src","type":"dir","size":0,"sha":"b"},
+  {"name":"Vendor","path":"Vendor","type":"submodule","size":0,"sha":"c"},
+  {"name":"a.txt","path":"a.txt","type":"file","size":3,"sha":"d"},
+  {"name":"Docs","path":"Docs","type":"dir","size":0,"sha":"e"}
+]

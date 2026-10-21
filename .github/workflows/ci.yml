@@ -1,0 +1,110 @@
+name: CI
+
+# Pull requests only: merging a pull request doesn't build again, since CI already passed on it.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A new push to the same pull request cancels the run that is still going.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+# Doc-only changes don't need a build, but the workflow still runs: `CI result` is meant to be the
+# required check on main, and a check that never reports would block the merge forever. Instead,
+# `changes` looks at the changed files (scripts/code-changes.sh decides what counts as docs) and
+# `build` is skipped when only docs changed. `CI result` then passes, because a job skipped by `if:`
+# doesn't count as a failure.
+jobs:
+  changes:
+    name: Code changed?
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.diff.outputs.code }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # history to diff against
+
+      - name: Look for non-doc changes
+        id: diff
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          # A manual run always builds.
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          # Three dots: the changes on the PR branch since it split from main.
+          elif files="$(./scripts/code-changes.sh "$PR_BASE...HEAD")" && [ -z "$files" ]; then
+            echo "Only docs changed: skipping the build."
+            echo "code=false" >> "$GITHUB_OUTPUT"
+          else
+            printf 'Changed files that need a build:\n%s\n' "$files"
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    name: Build and test (iOS)
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Show Xcode
+        run: xcodebuild -version
+
+      # Resolved packages (MarkdownUI, HighlightSwift) and the package build, keyed on the lock file.
+      - name: Package cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            Packages/DoscKit/.build
+            .build/DerivedData/SourcePackages
+          key: spm-${{ runner.os }}-${{ hashFiles('Packages/DoscKit/Package.swift', 'Packages/DoscKit/Package.resolved') }}
+          restore-keys: spm-${{ runner.os }}-
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Format
+        run: swift format lint --strict --recursive --parallel App AppTests Packages/DoscKit/Sources Packages/DoscKit/Tests Packages/DoscKit/Package.swift
+
+      - name: Package tests (macOS)
+        run: swift test --package-path Packages/DoscKit
+
+      - name: App tests (iOS Simulator)
+        run: |
+          xcodegen generate
+          # Pick an available iPhone simulator: runner images change their device list over time.
+          device="$(xcrun simctl list devices available -j | python3 -c 'import json,sys; d=json.load(sys.stdin)["devices"]; print(next(x["udid"] for k,v in d.items() if "iOS" in k for x in v if x["name"].startswith("iPhone")))')"
+          xcodebuild test -project Dosc.xcodeproj -scheme Dosc -destination "id=$device" \
+            -derivedDataPath .build/DerivedData CODE_SIGNING_ALLOWED=NO
+
+  # The one check to require on main. It always runs, and passes when the build passed or was
+  # skipped (docs-only change).
+  result:
+    name: CI result
+    needs: [changes, build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the build jobs
+        env:
+          CHANGES: ${{ needs.changes.result }}
+          BUILD: ${{ needs.build.result }}
+        run: |
+          echo "changes: $CHANGES, build: $BUILD"
+          if [ "$CHANGES" != "success" ]; then exit 1; fi
+          case "$BUILD" in
+            success | skipped) ;;
+            *) exit 1 ;;
+          esac

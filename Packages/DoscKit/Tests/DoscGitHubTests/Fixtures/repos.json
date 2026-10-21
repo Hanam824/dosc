@@ -1,0 +1,12 @@
+[
+  {"id":1296269,"name":"Hello-World","full_name":"octocat/Hello-World","private":false,"fork":false,
+   "owner":{"login":"octocat","avatar_url":"https://avatars.githubusercontent.com/u/583231?v=4"},
+   "html_url":"https://github.com/octocat/Hello-World","description":"My first repository on GitHub!",
+   "language":"Swift","stargazers_count":2800,"forks_count":2700,"open_issues_count":1500,"default_branch":"master",
+   "updated_at":"2026-10-01T10:00:00Z","pushed_at":"2026-10-02T11:00:00Z","topics":["demo"]},
+  {"id":2,"name":"secret","full_name":"octocat/secret","private":true,"fork":true,
+   "owner":{"login":"octocat","avatar_url":null},
+   "html_url":"https://github.com/octocat/secret","description":null,"language":null,
+   "stargazers_count":0,"forks_count":0,"open_issues_count":0,"default_branch":"main",
+   "updated_at":"2026-09-01T10:00:00Z","pushed_at":null}
+]

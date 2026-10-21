@@ -1,0 +1,5 @@
+{"number":1347,"title":"Amazing new feature","body":"Please pull these awesome changes in!","state":"open",
+ "user":{"login":"octocat"},"labels":[],"comments":2,"created_at":"2026-04-22T13:33:48Z","updated_at":"2026-04-23T13:33:48Z",
+ "closed_at":null,"merged_at":null,"html_url":"https://github.com/octocat/Hello-World/pull/1347","draft":true,
+ "head":{"ref":"new-topic","label":"octocat:new-topic"},"base":{"ref":"master","label":"octocat:master"},
+ "additions":100,"deletions":3,"changed_files":5,"commits":3}

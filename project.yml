@@ -1,0 +1,82 @@
+name: Dosc
+options:
+  bundleIdPrefix: app.dosc
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+packages:
+  DoscKit:
+    path: Packages/DoscKit
+targets:
+  Dosc:
+    type: application
+    platform: iOS
+    sources:
+      - App
+    dependencies:
+      - package: DoscKit
+        product: DoscFeatures
+      - package: DoscKit
+        product: DoscGitHub
+      - package: DoscKit
+        product: DoscNetworking
+      - package: DoscKit
+        product: DoscStorage
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: dosc
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        GitHubClientID: $(GITHUB_CLIENT_ID)
+        NSFaceIDUsageDescription: dosc uses Face ID to unlock the app when App Lock is on.
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        ITSAppUsesNonExemptEncryption: false
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.dosc.ios
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        GENERATE_INFOPLIST_FILE: false
+        CODE_SIGN_STYLE: Automatic
+  DoscTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - AppTests
+    dependencies:
+      - target: Dosc
+schemes:
+  Dosc:
+    build:
+      targets:
+        Dosc: all
+        DoscTests: [test]
+    test:
+      targets:
+        - DoscTests
+        - package: DoscKit/DoscCoreTests
+        - package: DoscKit/DoscNetworkingTests
+        - package: DoscKit/DoscStorageTests
+        - package: DoscKit/DoscGitHubTests
