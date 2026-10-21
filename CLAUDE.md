@@ -17,7 +17,7 @@ swift test --package-path Packages/DoscKit                    # package tests on
 swift test --package-path Packages/DoscKit --filter GitHub    # some tests
 xcodegen generate                                             # Dosc.xcodeproj from project.yml (git-ignored)
 xcodebuild test -project Dosc.xcodeproj -scheme Dosc \
-  -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO   # app + package tests on iOS
+  -destination 'platform=iOS Simulator,name=iPhone 17'          # app + package tests on iOS
 swift format format -i --recursive App AppTests Packages/DoscKit/Sources Packages/DoscKit/Tests Packages/DoscKit/Package.swift
 swift format lint --strict --recursive App AppTests Packages/DoscKit/Sources Packages/DoscKit/Tests Packages/DoscKit/Package.swift
 ./scripts/package-release.sh v0.0.0-local                     # unsigned IPA + simulator zip in dist/
@@ -27,7 +27,7 @@ TEAM_ID=<team> ./run.sh device                                # same on a connec
 
 If `xcodebuild` says it needs Xcode, not the Command Line Tools, run `sudo xcode-select -s /Applications/Xcode.app/Contents/Developer`, or prefix commands with `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer`. Install XcodeGen with `brew install xcodegen`.
 
-There is no paid Apple Developer account, so every build is unsigned (`CODE_SIGNING_ALLOWED=NO`). To run on a device, open the project in Xcode and pick a free Personal Team (the app expires after 7 days), or sideload a release IPA with AltStore or Sideloadly.
+There is no paid Apple Developer account. Simulator builds are signed ad-hoc (`CODE_SIGN_IDENTITY = -` in `project.yml`), because the Keychain rejects unsigned apps with error -34018; `AppTests/KeychainTests.swift` checks this. Release IPAs are unsigned (`CODE_SIGNING_ALLOWED=NO`) and get signed by whoever sideloads them. To run on a device, open the project in Xcode and pick a free Personal Team (the app expires after 7 days), or sideload a release IPA with AltStore or Sideloadly.
 
 For "Sign in with GitHub", copy `Config/Secrets.example.xcconfig` to `Config/Secrets.xcconfig` (git-ignored) and set the client ID of an OAuth App that has Device Flow enabled. Release builds read it from the repository variable `GITHUB_CLIENT_ID`.
 

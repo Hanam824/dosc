@@ -87,7 +87,7 @@ jobs:
           # Pick an available iPhone simulator: runner images change their device list over time.
           device="$(xcrun simctl list devices available -j | python3 -c 'import json,sys; d=json.load(sys.stdin)["devices"]; print(next(x["udid"] for k,v in d.items() if "iOS" in k for x in v if x["name"].startswith("iPhone")))')"
           xcodebuild test -project Dosc.xcodeproj -scheme Dosc -destination "id=$device" \
-            -derivedDataPath .build/DerivedData CODE_SIGNING_ALLOWED=NO
+            -derivedDataPath .build/DerivedData
 
   # The one check to require on main. It always runs, and passes when the build passed or was
   # skipped (docs-only change).
