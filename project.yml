@@ -6,8 +6,8 @@ options:
   createIntermediateGroups: true
   generateEmptyDirectories: true
 configFiles:
-  Debug: Config/Base.xcconfig
-  Release: Config/Base.xcconfig
+  Debug: Config/Debug.xcconfig
+  Release: Config/Release.xcconfig
 settings:
   base:
     SWIFT_VERSION: "6.0"

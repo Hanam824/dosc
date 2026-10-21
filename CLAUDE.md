@@ -29,7 +29,13 @@ If `xcodebuild` says it needs Xcode, not the Command Line Tools, run `sudo xcode
 
 There is no paid Apple Developer account. Simulator builds are signed ad-hoc (`CODE_SIGN_IDENTITY = -` in `project.yml`), because the Keychain rejects unsigned apps with error -34018; `AppTests/KeychainTests.swift` checks this. Release IPAs are unsigned (`CODE_SIGNING_ALLOWED=NO`) and get signed by whoever sideloads them. To run on a device, open the project in Xcode and pick a free Personal Team (the app expires after 7 days), or sideload a release IPA with AltStore or Sideloadly.
 
-For "Sign in with GitHub", copy `Config/Secrets.example.xcconfig` to `Config/Secrets.xcconfig` (git-ignored) and set the client ID of an OAuth App that has Device Flow enabled. Release builds read it from the repository variable `GITHUB_CLIENT_ID`.
+Build settings are in `Config/`. `Base.xcconfig` holds what's shared, and `Debug.xcconfig` and `Release.xcconfig` (selected in `project.yml`) include it plus an optional secrets file:
+
+- `Secrets.example.xcconfig`: the committed template listing every value.
+- `Secrets.development.xcconfig`: git-ignored, used by Debug builds (Xcode, `./run.sh`).
+- `Secrets.production.xcconfig`: git-ignored, used by Release builds. CI writes it from repository variables; for example, `GITHUB_CLIENT_ID` comes from `DOSC_GITHUB_CLIENT_ID`, because GitHub doesn't allow Actions variables starting with `GITHUB_`.
+
+For "Sign in with GitHub", set `GITHUB_CLIENT_ID` to the client ID of an OAuth App with Device Flow enabled. A missing file or empty value leaves token sign-in only.
 
 ## Git workflow and CI
 
