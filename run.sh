@@ -13,7 +13,7 @@
 #                         Settings → Accounts once; the team ID is shown there (Personal Team) or in
 #                         an Apple Development certificate's "OU". Apps signed this way run 7 days.
 #
-# Simulator builds are unsigned. Device builds let Xcode create the provisioning profile
+# Simulator builds are signed ad-hoc (no account needed; the Keychain requires a signature). Device builds let Xcode create the provisioning profile
 # (-allowProvisioningUpdates), so the Apple ID must be signed in to Xcode.
 set -euo pipefail
 
@@ -59,7 +59,7 @@ print(match["udid"] if match else "")
     [ -n "$udid" ] || die "no available simulator named '$name' (see ./run.sh list)"
 
     generate
-    build "id=$udid" CODE_SIGNING_ALLOWED=NO
+    build "id=$udid"
     local app="$derived/Build/Products/$config-iphonesimulator/Dosc.app"
 
     echo "Booting $name..." >&2

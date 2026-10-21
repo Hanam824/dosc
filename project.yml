@@ -11,6 +11,9 @@ configFiles:
 settings:
   base:
     SWIFT_VERSION: "6.0"
+    # Simulator builds are signed "to run locally" (ad-hoc, no Apple account needed): the Keychain
+    # refuses unsigned apps with error -34018. Device builds use the team passed by run.sh.
+    "CODE_SIGN_IDENTITY[sdk=iphonesimulator*]": "-"
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: "1"
 packages:
@@ -65,6 +68,9 @@ targets:
     platform: iOS
     sources:
       - AppTests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: true
     dependencies:
       - target: Dosc
 schemes:
